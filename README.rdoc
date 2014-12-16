@@ -1,0 +1,38 @@
+= API Documentation
+
+== Quickstart
+
+* Clone this git
+* Bungle gems
+* Start server on say, www.example.com
+
+== Useage
+
+* API works with POST requests
+* Send a POST request to www.example.com/api with params
+  1. user_token : send current user's facebook token
+  2. adjacency_data : basically an array of arrays with the inner arrays having two seat indexes, denoting the two seats are adjacent to each other.
+  example:
+  
+    adjacency_data = [ ["a1","a2"],["a2","a3"],["a4","a5"],["a5","a6"],["a7","a8"],["a8","a9"] ].to_json
+  3. seat_data: a hash of hashes with the keys being seat indexes and the value being another hash with
+  
+  occupied denoting weather seat is occupied (true/false)
+    
+  fb denoting seat token if the person in the occupied seat provides a facebook token
+  example:
+  
+    seat_data = {"a1" => {:occupied => true, :fb => "TOKEN"}, "a2" => { :occupied => true},"a3" => {:occupied => false}}.to_json
+    
+==Response
+
+* Server responds with a hash of hashes, keys being seat indexes and values being
+  1. If seat is occupied and there is no facebook token, then -1
+  2. If seat is unoccupied, a value between 0 and 1 denoting the rating of the seat with the current user
+  3. If the seat is occupied, Then, a hash with
+    - matched_likes : array of matched likes
+    - matched_num : number of matched likes
+    - co_likes : the total likes of the person in the seat
+    - co_name : name of person in the seat
+    - co_image : profile picture of the person in the seat
+
